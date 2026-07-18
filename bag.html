@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volt Pack | High-Performance Technical Carry</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        carbon: {
+                            800: '#1A1B1E',
+                            900: '#0F1012',
+                        },
+                        electricred: {
+                            300: '#FF4D4D',
+                            400: '#FF1A1A',
+                            500: '#CC0000',
+                        },
+                        studiogray: {
+                            50: '#F7F8FA',
+                            100: '#ECEFF4',
+                            200: '#DDE2EC',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS (Animate on Scroll) CSS Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <style>
+        .glass-nav {
+            background: rgba(15, 16, 18, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        .hover-underline-red {
+            position: relative;
+        }
+        .hover-underline-red::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FF1A1A;
+            transform-origin: bottom right;
+            transition: transform 0.4s ease-out;
+        }
+        .hover-underline-red:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Desktop specific cursor replacement */
+        @media (min-width: 768px) {
+            body, a, button, .lightbox-trigger {
+                cursor: none !important;
+            }
+        }
+
+        /* Custom Electric Red Ring Cursor Styling */
+        #custom-cursor {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #FF1A1A;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+        }
+        
+        #custom-cursor.scale-up {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(255, 26, 26, 0.15);
+            border-color: #FF1A1A;
+        }
+    </style>
+</head>
+<body class="bg-carbon-900 text-studiogray-100 font-sans antialiased overflow-x-hidden">
+
+    <!-- ================= CUSTOM HYPER CURSOR ================= -->
+    <div id="custom-cursor" class="hidden md:block"></div>
+
+    <!-- ================= TOAST NOTIFICATION SYSTEM ================= -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[110] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- ================= NAVIGATION ================= -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/10 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex flex-col group custom-hover">
+                <span class="font-sans text-2xl lg:text-3xl font-black tracking-tight text-white uppercase transition-colors group-hover:text-electricred-400 duration-300">Volt<span class="text-electricred-400">Pack</span></span>
+                <span class="font-sans text-[8px] tracking-[0.5em] text-studiogray-200/50 uppercase -mt-1">Technical Architecture</span>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-10 font-semibold text-xs tracking-widest uppercase text-studiogray-100">
+                <a href="#" class="hover-underline-red hover:text-electricred-400 transition-colors custom-hover">Home</a>
+                <a href="#about" class="hover-underline-red hover:text-electricred-400 transition-colors custom-hover">Specs</a>
+                <a href="#matrix" class="hover-underline-red hover:text-electricred-400 transition-colors custom-hover">Gear Matrix</a>
+                <a href="#labs" class="hover-underline-red hover:text-electricred-400 transition-colors custom-hover">Stress Lab</a>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#matrix" class="bg-electricred-400 hover:bg-white text-white hover:text-carbon-900 px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-300 shadow-lg shadow-electricred-400/10 inline-block custom-hover">Secure Drop</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Dynamic Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-carbon-900 border-b border-white/10 px-6 py-6 space-y-4 shadow-xl">
+            <a href="#" class="block font-semibold text-xs tracking-widest uppercase text-studiogray-100">Home</a>
+            <a href="#about" class="block font-semibold text-xs tracking-widest uppercase text-studiogray-100">Specs</a>
+            <a href="#matrix" class="block font-semibold text-xs tracking-widest uppercase text-studiogray-100">Gear Matrix</a>
+            <a href="#labs" class="block font-semibold text-xs tracking-widest uppercase text-studiogray-100">Stress Lab</a>
+            <a href="#matrix" class="block w-full text-center bg-electricred-400 text-white py-3 rounded-full text-xs font-bold tracking-widest uppercase">Secure Drop</a>
+        </div>
+    </nav>
+
+    <!-- ================= ENERGETIC HERO SECTION ================= -->
+    <header class="relative h-screen flex items-center justify-center bg-black overflow-hidden pt-20">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&q=80&w=1600" alt="Tactical Technical Waterproof Backpack" class="w-full h-full object-cover opacity-35 scale-105 animate-[pulse_10s_infinite]">
+            <div class="absolute inset-0 bg-gradient-to-t from-carbon-900 via-transparent to-black/60"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+            <span class="inline-block bg-white/10 backdrop-blur-md text-electricred-400 text-[10px] tracking-[0.4em] uppercase font-bold px-4 py-1.5 rounded-full mb-6 border border-white/10" data-aos="zoom-in">
+                X-Pac® Waterproof Laminate • Indestructible Build
+            </span>
+            <h1 class="font-sans font-extrabold text-5xl md:text-7xl lg:text-8xl text-white uppercase tracking-tight leading-none mb-6" data-aos="fade-up" data-aos-delay="200">
+                Uncompromising.<br><span class="font-serif italic text-electricred-400 font-normal lowercase">Engineered to endure.</span>
+            </h1>
+            <p class="font-sans text-sm md:text-lg text-studiogray-100/70 font-light tracking-wide max-w-2xl mx-auto mb-10" data-aos="fade-up" data-aos-delay="400">
+                Shattering standard utility loadout expectations. Built with ballistic fabrics, magnetic Fidlock® hardware, and dynamic modular internal organization systems.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-delay="600">
+                <a href="#matrix" class="w-full sm:w-auto bg-electricred-400 hover:bg-white text-white hover:text-carbon-900 font-bold px-8 py-4 rounded-full text-xs tracking-widest uppercase transition-all shadow-xl shadow-electricred-400/20 duration-300 custom-hover">
+                    Explore Drop Matrix
+                </a>
+                <a href="#about" class="w-full sm:w-auto border border-white/20 hover:border-electricred-400 bg-white/5 text-white px-8 py-4 rounded-full text-xs tracking-widest uppercase transition-all duration-300 custom-hover">
+                    View Stress Test Logs
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= COUNT-UP STATISTICS SECTION ================= -->
+    <section id="about" class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div class="lg:col-span-5 space-y-6" data-aos="fade-right">
+            <span class="font-sans text-xs tracking-[0.3em] text-electricred-400 uppercase font-bold">Lab Performance</span>
+            <h2 class="font-sans text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight">
+                High-Stress Shell Diagnostics.
+            </h2>
+            <div class="h-[2px] w-20 bg-electricred-400"></div>
+            <p class="text-studiogray-100/70 leading-relaxed font-light text-sm md:text-base">
+                Every technical pack undergoes complex lifecycle acceleration protocols. We gauge internal core pressure drop tolerances against extreme environmental thresholds to guarantee complete transit security.
+            </p>
+        </div>
+        
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6" data-aos="fade-left">
+            <div class="bg-carbon-800 p-8 rounded-2xl border border-white/5 shadow-xl space-y-2 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 h-1 w-0 bg-electricred-400 group-hover:w-full transition-all duration-500"></div>
+                <div class="flex justify-between items-center">
+                    <i class="fa-solid fa-cloud-showers-heavy text-2xl text-electricred-400"></i>
+                    <span class="text-[10px] tracking-widest uppercase text-white/40 font-bold">Water Guard</span>
+                </div>
+                <h3 class="font-sans font-extrabold text-4xl text-white tracking-tight">
+                    <span class="counter" data-target="10000">0</span>mm
+                </h3>
+                <h4 class="font-semibold text-xs text-studiogray-100 uppercase tracking-wider">Hydrostatic Head Pressure</h4>
+                <p class="text-xs text-studiogray-100/50 font-light">Complete atmospheric moisture blockage achieved through composite multi-layered membrane fusion.</p>
+            </div>
+
+            <div class="bg-carbon-800 p-8 rounded-2xl border border-white/5 shadow-xl space-y-2 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 h-1 w-0 bg-electricred-400 group-hover:w-full transition-all duration-500"></div>
+                <div class="flex justify-between items-center">
+                    <i class="fa-solid fa-weight-hanging text-2xl text-electricred-400"></i>
+                    <span class="text-[10px] tracking-widest uppercase text-white/40 font-bold">Max Tensile</span>
+                </div>
+                <h3 class="font-sans font-extrabold text-4xl text-white tracking-tight">
+                    <span class="counter" data-target="1680">0</span>D
+                </h3>
+                <h4 class="font-semibold text-xs text-studiogray-100 uppercase tracking-wider">Ballistic Nylon Density</h4>
+                <p class="text-xs text-studiogray-100/50 font-light">Military-grade puncture defense metrics engineered across all vulnerable stress and friction panels.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ITEM GALLERY WITH FUNCTIONAL LIGHTBOX ================= -->
+    <section id="matrix" class="bg-carbon-850 py-24 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center space-y-4 mb-16" data-aos="fade-up">
+                <span class="font-sans text-xs tracking-[0.3em] text-electricred-400 uppercase font-bold">Dynamic Modules</span>
+                <h2 class="font-sans text-3xl md:text-5xl font-extrabold uppercase text-white">The Gear Matrix</h2>
+                <p class="text-studiogray-100/60 font-light max-w-md mx-auto text-xs md:text-sm">Click any premium carry unit below to examine specific compartment counts, latch dynamics, and directly test secure deployment drops.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Bag Item 1 -->
+                <div class="group bg-carbon-800 rounded-2xl overflow-hidden border border-white/5 hover:border-electricred-400/40 transition-all duration-500 lightbox-trigger custom-hover" 
+                     data-id="overlord-backpack"
+                     data-img="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800" 
+                     data-title="Volt Apex 30L Waterproof Pack" 
+                     data-desc="Precision layered X-Pac® VX21 exterior sailcloth, fitted with dual Fidlock® V-Buckles, separate suspended 16-inch laptop chamber shell, and perimeter water-sealed Aquaguard® zippers."
+                     data-price="Rs. 18,500"
+                     data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-80 overflow-hidden relative bg-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600" alt="Technical Commuter Backpack" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <i class="fa-solid fa-crosshairs text-3xl text-electricred-400"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-electricred-400 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Apex Series</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-sans text-xl font-bold uppercase text-white">Volt Apex 30L Pack</h3>
+                            <span class="text-electricred-400 font-bold text-sm">Rs. 18,500</span>
+                        </div>
+                        <p class="text-studiogray-100/60 text-xs font-light leading-relaxed">Multi-point strategic compression framing built for rugged over-land deployments.</p>
+                    </div>
+                </div>
+
+                <!-- Bag Item 2 -->
+                <div class="group bg-carbon-800 rounded-2xl overflow-hidden border border-white/5 hover:border-electricred-400/40 transition-all duration-500 lightbox-trigger custom-hover" 
+                     data-id="kinetic-sling"
+                     data-img="https://images.unsplash.com/photo-1622560480654-d96214fdc887?auto=format&fit=crop&q=80&w=800" 
+                     data-title="Kinetic Tech Sling v2" 
+                     data-desc="Cross-body swift deployment variant optimized for fast access grids. Features quick-release aircraft aluminum slide hardware and internal RFID blocking grids."
+                     data-price="Rs. 7,900"
+                     data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-80 overflow-hidden relative bg-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1622560480654-d96214fdc887?auto=format&fit=crop&q=80&w=600" alt="Minimal Tech Sling Bag" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <i class="fa-solid fa-crosshairs text-3xl text-electricred-400"></i>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-electricred-400 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Swift Utility</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-sans text-xl font-bold uppercase text-white">Kinetic Tech Sling</h3>
+                            <span class="text-electricred-400 font-bold text-sm">Rs. 7,900</span>
+                        </div>
+                        <p class="text-studiogray-100/60 text-xs font-light leading-relaxed">Ambidextrous support strap geometry lined with premium EVA shock absorbing mesh inserts.</p>
+                    </div>
+                </div>
+
+                <!-- Bag Item 3 -->
+                <div class="group bg-carbon-800 rounded-2xl overflow-hidden border border-white/5 hover:border-electricred-400/40 transition-all duration-500 lightbox-trigger custom-hover" 
+                     data-id="quantum-duffel"
+                     data-img="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800" 
+                     data-title="Quantum Modular Transit Duffel 45L" 
+                     data-desc="High-volume utility duffel converting seamlessly into a balanced shoulder backpack configuration. Includes wet/dry shoe separation barriers and impact shield shells."
+                     data-price="Rs. 22,000"
+                     data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-80 overflow-hidden relative bg-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=600" alt="Technical Heavy Duty Duffel Bag" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <i class="fa-solid fa-crosshairs text-3xl text-electricred-400"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-sans text-xl font-bold uppercase text-white">Quantum Transit Duffel</h3>
+                            <span class="text-electricred-400 font-bold text-sm">Rs. 22,000</span>
+                        </div>
+                        <p class="text-studiogray-100/60 text-xs font-light leading-relaxed">Reinforced hyper-stitched anchor systems built to handle substantial weight loads.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= WORKING LIGHTBOX MODAL ================= -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[100] bg-carbon-900/95 hidden items-center justify-center p-4 transition-all duration-300 opacity-0">
+        <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-electricred-400 text-2xl focus:outline-none transition-colors custom-hover">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="bg-carbon-800 border border-white/10 text-white rounded-3xl max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-2xl scale-95 transition-transform duration-300" id="lightbox-content">
+            <div class="h-64 md:h-[450px] bg-black">
+                <img id="modal-img" src="" alt="Dynamic Carry Grid Expand" class="w-full h-full object-cover">
+            </div>
+            <div class="p-8 flex flex-col justify-center space-y-4">
+                <span class="font-sans text-[10px] tracking-[0.3em] uppercase text-electricred-400 font-bold">Material Specifications Matrix</span>
+                <h3 id="modal-title" class="font-sans text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-white">Product Title</h3>
+                <div class="h-[2px] w-12 bg-electricred-400 my-2"></div>
+                <p id="modal-desc" class="text-studiogray-100/70 text-sm font-light leading-relaxed">Product structural design specifications load here.</p>
+                <div class="pt-4 flex items-center justify-between">
+                    <span id="modal-price" class="text-electricred-400 text-xl font-bold uppercase font-sans">Price Tier</span>
+                    
+                    <!-- FUNCTIONAL ACTION BUTTON -->
+                    <button id="modal-order-btn" class="bg-electricred-400 hover:bg-white text-white hover:text-carbon-900 font-bold px-6 py-2.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 custom-hover">
+                        Add to Drop Loadout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= LAB STRESS RESISTANCE GRID ================= -->
+    <section id="labs" class="py-24 max-w-7xl mx-auto px-6 text-center space-y-12">
+        <div class="max-w-3xl mx-auto space-y-4" data-aos="fade-up">
+            <span class="font-sans text-xs tracking-[0.3em] text-electricred-400 uppercase font-bold">Testing Chambers</span>
+            <h2 class="font-sans text-3xl md:text-5xl font-extrabold text-white uppercase tracking-tight">Destructive Material Validation</h2>
+            <p class="text-studiogray-100/60 font-light text-sm">We don't buy basic performance claims. We put every production batch inside specialized environmental simulation chambers, exposing our internal seam seals to extreme freezing conditions and high-friction cycles.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="relative h-96 rounded-3xl overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" alt="Environmental Load Testing Chamber" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-carbon-900 via-carbon-900/30 to-transparent flex flex-col justify-end p-8 text-left space-y-2">
+                    <h4 class="font-sans text-2xl text-white font-extrabold uppercase tracking-tight">Torsion & Load Validation Labs</h4>
+                    <p class="text-studiogray-100/70 text-xs font-light max-w-sm">Continuous high-velocity mechanical pulling setups designed to test strap buckle structural integration limit points.</p>
+                </div>
+            </div>
+
+            <div class="relative h-96 rounded-3xl overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800" alt="Laser Fabric Clean Precision Cutting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-carbon-900 via-carbon-900/30 to-transparent flex flex-col justify-end p-8 text-left space-y-2">
+                    <h4 class="font-sans text-2xl text-white font-extrabold uppercase tracking-tight">Laser Fusion Seam Sealing</h4>
+                    <p class="text-studiogray-100/70 text-xs font-light max-w-sm">Every panel juncture undergoes intense high-frequency heat molecular bonding loops ensuring flawless structural air-tight tracking boundaries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-black text-studiogray-100 border-t border-white/5 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8 mb-12">
+            <div class="space-y-1">
+                <h3 class="font-sans text-4xl font-black uppercase tracking-tighter text-white">Volt<span class="text-electricred-400">Pack</span></h3>
+                <p class="text-electricred-400 font-sans text-xs tracking-[0.4em] uppercase font-bold">Resilient Technical Architecture</p>
+            </div>
+            
+            <p class="text-studiogray-100/50 text-xs font-light max-w-md leading-relaxed">
+                Connect directly with our physical carry development leads to secure customized contract gear configurations, individual agency drops, or locate regional premium labs.
+            </p>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-white/5 text-center text-studiogray-100/30 text-[10px] tracking-widest flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>&copy; 2026 Volt Pack Architecture Labs. Engineered for High-Velocity Adaptability.</p>
+            <p class="font-bold text-electricred-400/50">High-Purity Composite Structural Systems</p>
+        </div>
+    </footer>
+
+    <!-- ================= INTERACTIVE JAVASCRIPT MATRIX ================= -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // Init AOS
+        AOS.init({
+            duration: 700,
+            easing: 'ease-out-quad',
+            once: true
+        });
+
+        // Mobile Menu Navigation Drop Matrix Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Custom Cyber Red Ring Cursor Smooth Trailing Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Interactive scale-up mouse trail hooks
+        const updateCursorHoverEffects = () => {
+            const interactiveElements = document.querySelectorAll('a, button, .lightbox-trigger, .custom-hover');
+            interactiveElements.forEach(item => {
+                item.addEventListener('mouseenter', () => cursor.classList.add('scale-up'));
+                item.addEventListener('mouseleave', () => cursor.classList.remove('scale-up'));
+            });
+        };
+        updateCursorHoverEffects();
+
+        // Count-Up Statistics Functionality with IntersectionObserver integration
+        const counters = document.querySelectorAll('.counter');
+        const countUpSpeed = 60;
+
+        const triggerCountUp = (counterElement) => {
+            const updateCount = () => {
+                const target = +counterElement.getAttribute('data-target');
+                const currentCount = +counterElement.innerText;
+                const increment = Math.ceil(target / countUpSpeed);
+
+                if (currentCount < target) {
+                    counterElement.innerText = Math.min(currentCount + increment, target);
+                    setTimeout(updateCount, 25);
+                } else {
+                    counterElement.innerText = target;
+                }
+            };
+            updateCount();
+        };
+
+        const statsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const targetCounter = entry.target;
+                    triggerCountUp(targetCounter);
+                    observer.unobserve(targetCounter);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        counters.forEach(counter => statsObserver.observe(counter));
+
+        // TOAST NOTIFICATION LOGIC SYSTEM
+        const toastContainer = document.getElementById('toast-container');
+        
+        const showToast = (itemName, itemPrice) => {
+            const toast = document.createElement('div');
+            toast.className = "bg-carbon-800 border border-electricred-400 text-white px-5 py-4 rounded-2xl flex items-center gap-4 shadow-2xl pointer-events-auto transform translate-y-4 opacity-0 transition-all duration-300 max-w-sm";
+            toast.innerHTML = `
+                <div class="bg-electricred-400/20 p-2.5 rounded-xl text-electricred-400">
+                    <i class="fa-solid fa-box-archive text-sm"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-sans font-bold text-xs uppercase tracking-wide">Loadout Secured</h4>
+                    <p class="text-[11px] text-studiogray-100/60">${itemName} (${itemPrice}) successfully linked.</p>
+                </div>
+                <button class="text-white/40 hover:text-white text-xs focus:outline-none close-toast-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+            
+            const killTimeout = setTimeout(() => {
+                dismissToast(toast);
+            }, 4000);
+
+            toast.querySelector('.close-toast-btn').addEventListener('click', () => {
+                clearTimeout(killTimeout);
+                dismissToast(toast);
+            });
+        };
+
+        const dismissToast = (toastElement) => {
+            toastElement.classList.add('opacity-0', 'translate-y-2');
+            setTimeout(() => {
+                toastElement.remove();
+            }, 300);
+        };
+
+        // Lightbox Architecture Logic with Active Booking Hooks
+        const triggers = document.querySelectorAll('.lightbox-trigger');
+        const modal = document.getElementById('lightbox-modal');
+        const closeBtn = document.getElementById('lightbox-close');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalPrice = document.getElementById('modal-price');
+        const modalContent = document.getElementById('lightbox-content');
+        const modalOrderBtn = document.getElementById('modal-order-btn');
+
+        let activeItemData = { title: '', price: '' };
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                activeItemData.title = trigger.getAttribute('data-title');
+                activeItemData.price = trigger.getAttribute('data-price');
+
+                modalImg.src = trigger.getAttribute('data-img');
+                modalTitle.textContent = activeItemData.title;
+                modalDesc.textContent = trigger.getAttribute('data-desc');
+                modalPrice.textContent = activeItemData.price;
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            });
+        });
+
+        // WORKING MODAL ACTION BUTTON
+        modalOrderBtn.addEventListener('click', () => {
+            closeModal();
+            setTimeout(() => {
+                showToast(activeItemData.title, activeItemData.price);
+            }, 350);
+        });
+
+        const closeModal = () => {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        };
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+</body>
+</html>
